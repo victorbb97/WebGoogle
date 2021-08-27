@@ -1,0 +1,25 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<html>
+<head>
+    <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyA-te20eutrGEAB3gYWvYT6Y23636yVZGQ&callback=initMap" async defer></script>
+    <script src="~/js/googleMaps.js"></script>
+</head>
+<body>
+
+    <input type="button" value="Clique para Exibir o Mapa" onclick="ExibirGoogleMaps()" />
+    <input type="text" id="address" value=""/><span><button value="Encode" onclick="codeAddress()">Buscar Endereço</button></span>
+    <div id="macDiv" style="width:100%;height:500px;"></div>
+    
+
+
+    
+    
+
+
+
+</body>
+
+</html>
