@@ -43,6 +43,11 @@ var route;
 
 var compareArrays = 0;
 
+var seta;
+
+var marker;
+
+
 function ExibirGoogleMaps() {
     //Define a latitude e Longitude do Mapa
     var meuEndereco = new google.maps.LatLng(-23.618130, -46.534809);
@@ -99,21 +104,74 @@ function ExibirGoogleMaps() {
 }
 
 function codeAddress() {
+    if (marker != null || marker != undefined)
+        marker.setMap(null);
+
     var address = document.getElementById("address").value;
     geocoder.geocode({ "address": address }, function (results) {
         if (address !== '') {
             map.setCenter(results[0].geometry.location);
-            var marker = new google.maps.Marker({
+             marker = new google.maps.Marker({
                 map: map,
                 animation: google.maps.Animation.BOUNCE,
                 position: results[0].geometry.location
             });
             marker.setMap(map);
+
+            calcNearestStopPoint(results[0].geometry.location);
            
         } else {
             alert('Geocode was not successful');
         }
     });
+}
+
+function calcNearestStopPoint(searchPoint) {
+
+    if (seta != null || seta != undefined) 
+        seta.setMap(null);
+
+    let distances = [];
+    for (let i = 0; i < latlongArr.length; i++) {
+        
+        let actualDistance = calcDistPoints(searchPoint, latlongArr[i].lat, latlongArr[i].long);
+        distances.push(actualDistance);
+      
+    }
+
+    let minor = distances.map(Number).reduce(function (a, b) {
+        return Math.min(a, b);
+    });
+
+    let position = distances.indexOf(minor);
+
+    const arrowTest = {
+        path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+    };
+
+    seta = new google.maps.Polyline({
+        path: [
+            { lat: searchPoint.lat(), lng: searchPoint.lng() }, //começo da seta
+            { lat: latlongArr[position].lat, lng: latlongArr[position].long }, //fim da seta
+
+        ],
+        icons: [
+            {
+                icon: arrowTest, //desenho da seta
+                offset: "100%",
+            },
+        ],
+        map: map,
+    });
+
+    seta.setMap(map);
+
+}
+
+function calcDistPoints(searchPoints,latStopPoint,longStopPoint) {
+
+    return Math.sqrt(Math.pow(latStopPoint - searchPoints.lat(), 2) + Math.pow(longStopPoint - searchPoints.lng(), 2));
+
 }
 
 
@@ -218,8 +276,10 @@ function setBusStopsCoordinates(latlongArr, map) {
         path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
     };
 
-   // let directionsService = new google.maps.DirectionsService;
-   // let directionsDisplay = new google.maps.DirectionsRenderer;
+    //let directionsService = new google.maps.DirectionsService;
+    //let directionsDisplay = new google.maps.DirectionsRenderer;
+
+    //directionsDisplay.setMap(map);
 
     for (var i = 0; i < latlongArr.length; i++) {
         let busStopMarker = new google.maps.Marker({
@@ -253,15 +313,15 @@ function setBusStopsCoordinates(latlongArr, map) {
             lineArrow.setMap(map);
         }
         //if (i > 0) {
-            //directionsService.route({
-            //    origin: new google.maps.LatLng(latlongArr[i - 1].lat, latlongArr[i - 1].long),
-            //    destination: new google.maps.LatLng(latlongArr[i].lat, latlongArr[i].long),
-            //    travelMode: 'DRIVING'
-            //}, function (response, status, url) {
-            //    status === 'OK' ? directionsDisplay.setDirections(result) : window.alert('Falha na obtencao da rota...')
-            //});
+        //    directionsService.route({
+        //        origin: new google.maps.LatLng(latlongArr[i - 1].lat, latlongArr[i - 1].long),
+        //        destination: new google.maps.LatLng(latlongArr[i].lat, latlongArr[i].long),
+        //        travelMode: 'DRIVING'
+        //    }, function (response, status) {
+        //        status === 'OK' ? directionsDisplay.setDirections(result) : window.alert('Falha na obtencao da rota...')
+        //    });
 
-            // directionsDisplay.setMap(map);
+        //     directionsDisplay.setMap(map);
 
         //}
         
