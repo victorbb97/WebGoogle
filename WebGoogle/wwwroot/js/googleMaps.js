@@ -114,8 +114,10 @@ function codeAddress() {
              marker = new google.maps.Marker({
                 map: map,
                 animation: google.maps.Animation.BOUNCE,
-                position: results[0].geometry.location
+                position: results[0].geometry.location                
             });
+            document.getElementById("latitude").value = results[0].geometry.location.lat();
+            document.getElementById("longitude").value = results[0].geometry.location.lng();
             marker.setMap(map);
 
             calcNearestStopPoint(results[0].geometry.location);
