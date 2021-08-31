@@ -6,30 +6,49 @@
 <head>
     <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyA-te20eutrGEAB3gYWvYT6Y23636yVZGQ&callback=initMap" async defer></script>
     <script src="~/js/googleMaps.js"></script>
-</head>
-<body>
+    <style>
 
-    <input type="button" value="Clique para Exibir o Mapa" onclick="ExibirGoogleMaps()" />
-    <input type="text" id="address" value="" /><span><button value="Encode" onclick="codeAddress()">Buscar Endereço</button></span>
+        #mostrar {
+            display: none;
+        }
+
+        #mostrar2 {
+            display: none;
+        }
+    </style>
+</head>
+
+
+<body>
+    @*<input type="button" value="Clique para Exibir o Mapa" onclick="ExibirGoogleMaps()" /><br /><br /><br />*@
     <div>
+        <label>Deseja buscar o endereço por? </label><br />
+        <div style="float:right; ">
+            <b>Resultados:</b><span><input style="width: 550px; height: 65px;" type="text" id="result" /></span>
+        </div>
+
+        <button onclick="BuscarPorDiv('l')">Latitude e Longitude</button> Ou
+        <button onclick="BuscarPorDiv('e')">Logradouro</button><br /><br /><br /><div></div>
+    </div><br />
+
+    <div id="mostrar">
+        <p>
+            Nome da Rua(Avenida,Travessa), número e cidade.
+            <input type="text" id="address" value="" width="30" /><span><button value="Encode" onclick="codeAddress()">Buscar por Endereço</button></span>
+        </p>
+    </div>
+
+    <div id="mostrar2">
         <p>
             Latitude:
-            <input type="text" id="latitude" readonly />
+            <input type="text" id="latitude" />
         </p>
         <p>
             Longitude:
-            <input type="text" id="longitude" readonly />
+            <input type="text" id="longitude" /><span><button value="Encode" onclick="searchForLatLong()">Buscar por Coordenadas</button></span>
         </p>
     </div>
     <div id="macDiv" style="width:100%;height:500px;"></div>
-
-
-
-
-
-
-
-
 </body>
 
 </html>

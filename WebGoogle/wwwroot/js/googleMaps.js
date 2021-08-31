@@ -97,16 +97,16 @@ function ExibirGoogleMaps() {
 
     marcador.setMap(map);
     marcador2.setMap(map);
-	lineArrow.setMap(map);
+	//lineArrow.setMap(map);
 
-    setBusStopsCoordinates(latlongArr, map);
+    //setBusStopsCoordinates(latlongArr, map);
        
 }
 
 function codeAddress() {
-    if (marker != null || marker != undefined)
-        marker.setMap(null);
-
+    //if (marker != null || marker != undefined)
+      //  marker.setMap(null);
+    ExibirGoogleMaps()
     var address = document.getElementById("address").value;
     geocoder.geocode({ "address": address }, function (results) {
         if (address !== '') {
@@ -116,17 +116,56 @@ function codeAddress() {
                 animation: google.maps.Animation.BOUNCE,
                 position: results[0].geometry.location                
             });
-            document.getElementById("latitude").value = results[0].geometry.location.lat();
-            document.getElementById("longitude").value = results[0].geometry.location.lng();
-            marker.setMap(map);
+            //document.getElementById("latitude").value = results[0].geometry.location.lat();
+            //document.getElementById("longitude").value = results[0].geometry.location.lng();
+            
 
-            calcNearestStopPoint(results[0].geometry.location);
+            document.getElementById("result").value = ("Coordenadas informadas: " + results[0].geometry.location.lat() + results[0].geometry.location.lng());
+            alert("Coordenadas informadas: " + results[0].geometry.location.lat() + results[0].geometry.location.lng());
+            marker.setMap(map);
+            //calcNearestStopPoint(results[0].geometry.location);
            
         } else {
             alert('Geocode was not successful');
         }
     });
 }
+
+function searchForLatLong() {
+    ExibirGoogleMaps()
+    var lat = parseFloat(document.getElementById("latitude").value);
+    var lng = parseFloat(document.getElementById("longitude").value);
+    var latlng = new google.maps.LatLng(lat, lng);
+    var geocoder = geocoder = new google.maps.Geocoder();
+    geocoder.geocode({ 'latLng': latlng }, function (results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+            map.setCenter(results[0].geometry.location);
+            var marker = new google.maps.Marker({
+                map: map,
+                animation: google.maps.Animation.BOUNCE,
+                position: results[0].geometry.location
+            });
+            marker.setMap(map);
+            document.getElementById("result").value = results[1].formatted_address;
+            if (results[1]) {
+                alert("Endereço formatado: " + results[1].formatted_address);
+            }
+        }
+    });
+}
+
+function BuscarPorDiv(parametro) {
+    if (parametro != 'e') {
+        document.getElementById('mostrar2').style.display = 'block';
+        document.getElementById('mostrar').style.display = 'none';
+    }
+    else {
+        document.getElementById('mostrar').style.display = 'block';
+        document.getElementById('mostrar2').style.display = 'none';
+    }
+
+}
+
 
 function calcNearestStopPoint(searchPoint) {
 
